@@ -22,3 +22,8 @@ Import the module and start the implementation by checking out the
 stripe guide https://stripe.com/docs/terminal/sdk/js.
 
     import StripeTerminal from "stripe-terminal"
+    
+# Todo
+- Setup alarms that check if the static files changed 
+- Add in tests
+- Add comments for functions 
