@@ -1,12 +1,27 @@
 {
   "name": "stripe-terminal",
-  "version": "1.0.1",
-  "description": "",
+  "version": "1.0.2",
+  "description": "A SDK for stripe terminal",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"Error: Tests coming soon\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Avery Durrant <avery@corkdrinks.com>",
+  "keywords": [
+    "stripe",
+    "terminal",
+    "stripe-terminal",
+    "react",
+    "react-native",
+    "react-native-stripe-terminal"
+  ],
+  "bugs": {
+    "url": "https://github.com/avery246813579/Stripe-Terminal/issues",
+    "email": "avery@corkdrinks.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avery246813579/Stripe-Terminal.git"
+  }
 }
