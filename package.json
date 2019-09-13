@@ -1,6 +1,6 @@
 {
   "name": "stripe-terminal",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "A SDK for stripe terminal",
   "main": "index.js",
   "license": "MIT",
