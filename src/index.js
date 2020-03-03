@@ -1,17 +1,36 @@
 class StripeTerminal {
-    PAYMENT_STATUS = {
-        NOT_READY: "not_ready",
-        READY: "ready",
-        WAITING_FOR_INPUT: "waiting_for_input",
-        PROCESSING: "processing"
-    };
+    /**
+     * Payment status options for the payment workflow
+     *
+     * @type {{READY: string, NOT_READY: string, PROCESSING: string, WAITING_FOR_INPUT: string}}
+     */
+    get PAYMENT_STATUS() {
+        return {
+            NOT_READY: "not_ready",
+            READY: "ready",
+            WAITING_FOR_INPUT: "waiting_for_input",
+            PROCESSING: "processing"
+        }
+    }
 
-    CONNECTION_STATUS = {
-        CONNECTING: "connecting",
-        CONNECTED: "connected",
-        NOT_CONNECTED: "not_connected"
-    };
+    /**
+     * Connection status options for the terminal
+     *
+     * @type {{CONNECTING: string, NOT_CONNECTED: string, CONNECTED: string}}
+     */
+    get CONNECTION_STATUS() {
+        return {
+            CONNECTING: "connecting",
+            CONNECTED: "connected",
+            NOT_CONNECTED: "not_connected"
+        }
+    }
 
+    /**
+     * Fetches the most recent version of terminal api and stores it in memory.
+     *
+     * @private
+     */
     async _setupLibrary() {
         if (this._StripeTerminal) {
             return this._StripeTerminal;
@@ -22,7 +41,7 @@ class StripeTerminal {
         let data = rawText.replace("document.title", "-1").replace("var StripeTerminal", "var StripeTerminalRaw");
         eval(data);
 
-        this._StripeTerminal = StripeTerminalRaw
+        this._StripeTerminal = StripeTerminalRaw;
         return this._StripeTerminal;
     }
 
@@ -46,8 +65,6 @@ class StripeTerminal {
         await this._setupLibrary();
 
         this.terminalInstance = this._StripeTerminal.create(options);
-
-        console.log(this._StripeTerminal);
     }
 
     /**
@@ -132,6 +149,49 @@ class StripeTerminal {
      */
     getPaymentStatus() {
         return this.terminalInstance.getConnectionStatus();
+    }
+
+    /**
+     * Disconnects from the connected reader.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#disconnect
+     */
+    disconnectReader() {
+        return this.terminalInstance.disconnectReader();
+    }
+
+    /**
+     * Clears the current ConnectionToken, and any other cached credentials.
+     *
+     * Use this method to switch accounts in your application (e.g., to switch between live and test Stripe API keys on
+     * your backend)
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#disconnect
+     */
+    clearCachedCredentials() {
+        return this.terminalInstance.clearCachedCredentials();
+    }
+
+    /**
+     * Clears the reader display and resets it to the splash screen.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#clear-reader-display
+     */
+    clearReaderDisplay() {
+        return this.terminalInstance.clearReaderDisplay();
+    }
+
+    /**
+     * Updates the reader display with cart details.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#set-reader-display
+     *
+     * @param displayInfo               Cart Display INfo https://stripe.com/docs/terminal/checkout/cart-display
+     * @return Promise                  a Promise that resolves to an empty object if the command succeeds. If the
+     *     command fails, the Promise resolves to an object with an error.
+     */
+    setReaderDisplay(displayInfo) {
+        return this.terminalInstance.setReaderDisplay(displayInfo);
     }
 }
 
