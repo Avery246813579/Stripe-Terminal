@@ -125,7 +125,7 @@ class StripeTerminal {
      * @return {Promise<void|*>}
      */
     async processPayment(paymentIntent) {
-        return await this.terminalInstance.cancelCollectPaymentMethod();
+        return await this.terminalInstance.processPayment(paymentIntent);
     }
 
     /**
@@ -147,7 +147,7 @@ class StripeTerminal {
      * @return {string}        PaymentStatus can be one of not_ready, ready, waiting_for_input, or processing.
      */
     getPaymentStatus() {
-        return this.terminalInstance.getConnectionStatus();
+        return this.terminalInstance.getPaymentStatus();
     }
 
     /**
