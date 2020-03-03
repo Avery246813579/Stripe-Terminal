@@ -36,9 +36,10 @@ class StripeTerminal {
             return this._StripeTerminal;
         }
 
+        let StripeTerminalRaw = null;
         let response = await fetch('https://js.stripe.com/terminal/v1');
         let rawText = await response.text();
-        let data = rawText.replace("document.title", "-1").replace("var StripeTerminal", "var StripeTerminalRaw");
+        let data = rawText.replace("document.title", "-1").replace("var StripeTerminal", "StripeTerminalRaw");
         eval(data);
 
         this._StripeTerminal = StripeTerminalRaw;
