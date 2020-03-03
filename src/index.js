@@ -1,5 +1,3 @@
-let _eval = require("eval");
-
 class StripeTerminal {
     /**
      * Payment status options for the payment workflow
