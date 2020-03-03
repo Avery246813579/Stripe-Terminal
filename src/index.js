@@ -1,3 +1,5 @@
+let _eval = require("eval");
+
 class StripeTerminal {
     /**
      * Payment status options for the payment workflow
@@ -39,10 +41,9 @@ class StripeTerminal {
         let StripeTerminalRaw = null;
         let response = await fetch('https://js.stripe.com/terminal/v1');
         let rawText = await response.text();
-        let data = rawText.replace("document.title", "-1").replace("var StripeTerminal", "StripeTerminalRaw");
-        eval(data);
+        let data = rawText.replace("document.title", "-1").replace("var StripeTerminal=", "module.exports = ");
 
-        this._StripeTerminal = StripeTerminalRaw;
+        this._StripeTerminal = _eval(data);
         return this._StripeTerminal;
     }
 
