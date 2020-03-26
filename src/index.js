@@ -38,7 +38,10 @@ class StripeTerminal {
 
         let response = await fetch('https://js.stripe.com/terminal/v1');
         let rawText = await response.text();
-        let data = rawText.replace("document.title", "-1").replace("var StripeTerminal=", "module.exports =");
+        let data = rawText.replace("document.title", "-1")
+            .replace("window.location.origin", "React Native")
+            .replace("window.location.pathname", "")
+            .replace("var StripeTerminal=", "module.exports =");
 
         this._StripeTerminal = eval(data);
         return this._StripeTerminal;
