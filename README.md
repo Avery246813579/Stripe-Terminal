@@ -1,4 +1,6 @@
 # Stripe Terminal
+[![npm version](https://badge.fury.io/js/stripe-terminal.svg)](https://badge.fury.io/js/stripe-terminal)
+
 A project that will allow you to use the Stripe JS Terminal integration using javascript's importing/requiring instead 
 of using a script in your header. This was specifically created for use in code bases that don't allow static script 
 importing (ex. React, React Native).
