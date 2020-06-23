@@ -1,6 +1,6 @@
 {
   "name": "stripe-terminal",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "A SDK for stripe terminal",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
@@ -22,7 +22,8 @@
   ],
   "dependencies": {
     "core-js": "^2.6.5",
-    "regenerator-runtime": "^0.13.3"
+    "regenerator-runtime": "^0.13.3",
+    "base-64": "^0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",

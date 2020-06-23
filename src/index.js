@@ -1,3 +1,13 @@
+import { decode, encode } from 'base-64';
+
+if (!global.btoa) {
+    global.btoa = encode;
+}
+
+if (!global.atob) {
+    global.atob = decode;
+}
+
 class StripeTerminal {
     /**
      * Payment status options for the payment workflow
@@ -36,14 +46,20 @@ class StripeTerminal {
             return this._StripeTerminal;
         }
 
+        if (this._StripeTerminal) {
+            return this._StripeTerminal;
+        }
+
         let response = await fetch('https://js.stripe.com/terminal/v1');
         let rawText = await response.text();
+        let _ref = null;
         let data = rawText.replace("document.title", "-1")
             .replace("window.location.origin", '"React Native"')
             .replace("window.location.pathname", '""')
-            .replace("var StripeTerminal=", "module.exports =");
+            .replace("var StripeTerminal=", "_ref=");
 
-        this._StripeTerminal = eval(data);
+        eval(data);
+        this._StripeTerminal = _ref;
         return this._StripeTerminal;
     }
 

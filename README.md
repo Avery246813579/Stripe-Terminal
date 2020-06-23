@@ -27,7 +27,7 @@ The package needs to be configured to your stripe account using. Use the setup f
 and other available callbacks.
 
     import StripeTerminal from "stripe-terminal"
-    await StripeJavascriptTerminal.setup({
+    await StripeTerminal.setup({
         onFetchConnectionToken: this.fetchToken.bind(this), // Required
         onUnexpectedReaderDisconnect: this.readerDisconnect.bind(this),
     });
