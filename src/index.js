@@ -41,7 +41,11 @@ class StripeTerminal {
      *
      * Reference: https://stripe.com/docs/terminal/js-api-reference#errors
      *
-     * @type {{CONNECTING: string, NOT_CONNECTED: string, CONNECTED: string}}
+     * @return {{CANCELABLE_ALREADY_COMPLETED: string, INVALID_READER_VERSION: string, COMMAND_ALREADY_IN_PROGRESS:
+     *     string, ALREADY_CONNECTED: string, NO_ACTIVE_READ_REUSABLE_CARD_ATTEMPT: string, NO_ESTABLISHED_CONNECTION:
+     *     string, FAILED_FETCH_CONNECTION_TOKEN: string, NO_ACTIVE_COLLECT_PAYMENT_METHOD_ATTEMPT: string,
+     *     DISCOVERY_TOO_MANY_READERS: string, READER_ERROR: string, CANCELED: string, NETWORK_ERROR: string,
+     *     CANCELABLE_ALREADY_CANCELED: string, NETWORK_TIMEOUT: string}}
      */
     get ERRORS() {
         return {
