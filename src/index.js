@@ -1,4 +1,4 @@
-import { decode, encode } from 'base-64';
+import {decode, encode} from 'base-64';
 
 if (!global.btoa) {
     global.btoa = encode;
@@ -33,6 +33,32 @@ class StripeTerminal {
             CONNECTING: "connecting",
             CONNECTED: "connected",
             NOT_CONNECTED: "not_connected"
+        }
+    }
+
+    /**
+     * Errors returned by the JavaScript SDK include an error code, as well as a human-readable message.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#errors
+     *
+     * @type {{CONNECTING: string, NOT_CONNECTED: string, CONNECTED: string}}
+     */
+    get ERRORS() {
+        return {
+            NO_ESTABLISHED_CONNECTION: "no_established_connection",
+            NO_ACTIVE_COLLECT_PAYMENT_METHOD_ATTEMPT: "no_active_collect_payment_method_attempt",
+            NO_ACTIVE_READ_REUSABLE_CARD_ATTEMPT: "no_active_read_reusable_card_attempt",
+            CANCELED: "canceled",
+            CANCELABLE_ALREADY_COMPLETED: "cancelable_already_completed",
+            CANCELABLE_ALREADY_CANCELED: "cancelable_already_canceled",
+            NETWORK_ERROR: "network_error",
+            NETWORK_TIMEOUT: "network_timeout",
+            ALREADY_CONNECTED: "already_connected",
+            FAILED_FETCH_CONNECTION_TOKEN: "failed_fetch_connection_token",
+            DISCOVERY_TOO_MANY_READERS: "discovery_too_many_readers",
+            INVALID_READER_VERSION: "invalid_reader_version",
+            READER_ERROR: "reader_error",
+            COMMAND_ALREADY_IN_PROGRESS: "command_already_in_progress"
         }
     }
 
@@ -191,12 +217,34 @@ class StripeTerminal {
     }
 
     /**
-     * Clears the reader display and resets it to the splash screen.
+     * Reads a card for online reuse.
      *
-     * Reference: https://stripe.com/docs/terminal/js-api-reference#clear-reader-display
+     * Online payments initiated from Terminal do not benefit from the lower pricing and liability shift given to
+     * standard Terminal payments. Most integrations do not need to use readReusableCard. To simply collect an
+     * in-person payment from a customer, use the standard flow.
+     *
+     * Note: Currently, you can’t use Stripe Terminal to save contactless cards and mobile wallets (e.g., Apple Pay,
+     * Google Pay) for later reuse.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#read-reusable-card
+     *
+     * @return Promise              Returns a Promise that resolves to an object with the following fields:
+     *     payment_method: The PaymentMethod object, if the command succeeded.error: An error, if the command failed.
      */
-    clearReaderDisplay() {
-        return this.terminalInstance.clearReaderDisplay();
+    readReusableCard() {
+        return this.terminalInstance.readReusableCard();
+    }
+
+    /**
+     * Cancels an outstanding readReusableCard command.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#cancel-read-reusable-card
+     *
+     * @return Promise              A Promise that resolves to an empty object once the command has been successfully
+     *     canceled. If cancellation fails, the Promise resolves to an object with an error.
+     */
+    cancelReadReusableCard() {
+        return this.terminalInstance.cancelReadReusableCard();
     }
 
     /**
@@ -210,6 +258,106 @@ class StripeTerminal {
      */
     setReaderDisplay(displayInfo) {
         return this.terminalInstance.setReaderDisplay(displayInfo);
+    }
+
+    /**
+     * Clears the reader display and resets it to the splash screen.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#clear-reader-display
+     */
+    clearReaderDisplay() {
+        return this.terminalInstance.clearReaderDisplay();
+    }
+
+    /**
+     * Sets the configuration object for the simulated card reader.
+     *
+     * This method only takes effect when connected to the simulated reader; it performs no action otherwise.
+     *
+     * The simulated reader will follow the specified configuration only until processPayment is complete. At that
+     * point, the simulated reader will revert to its default behavior.
+     *
+     * Note that this method overwrites any currently active configuration object; to add specific key-value pairs to
+     * the object, make sure to use a combination of this method and getSimulatorConfiguration.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#stripeterminal-setsimulatorconfig
+     *
+     * @param configuration                         Configuration options for simulator
+     * @param configuration.testCardNumber          Configures the simulated reader to use a test card number as the
+     *     payment method presented by the user. This can be used to test different scenarios in your integration, such
+     *     as payments with different card brands or processing errors like a declined charge.
+     * @param configuration.testPaymentMethod       Serves the same purpose as testCardNumber, but relies on test
+     *     payment methods instead.
+     * @param configuration.payment_method_type     Determine the type of payment method created by the simulated
+     *     reader when collectPaymentMethod is called.
+     */
+    setSimulatorConfiguration(configuration) {
+        return this.terminalInstance.setSimulatorConfiguration(configuration);
+    }
+
+    /**
+     * The Stripe Terminal JavaScript SDK may overwrite this value as necessary, including (but not limited to)
+     * resetting the value after processPayment is complete, and removing unknown key-value pairs.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#stripeterminal-getsimulatorconfig
+     *
+     * @return String                 Returns the currently active configuration object.
+     */
+    getSimulatorConfiguration() {
+        return this.terminalInstance.getSimulatorConfiguration();
+    }
+
+    /**
+     * Begins collecting a payment method to be refunded
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#stripeterminal-collectrefundpaymentmethod
+     *
+     * @param charge_id                             The ID of the charge that will be refunded.
+     * @param amount                                A number that represents the amount, in cents, that will be
+     *     refunded
+     *     from the charge. This number must be less than or equal to the amount that was charged in the original
+     *     payment..
+     * @param currency                              Three-letter ISO code for the currency, in lowercase. Must be a
+     *     supported currency.
+     * @param options                               An optional object containing additional refund parameters.
+     * @param options.refund_application_fee        Boolean indicating whether the application fee should be refunded
+     *     when refunding this charge. If a full charge refund is given, the full application fee will be refunded.
+     *     Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge
+     *     refunded.
+     * @param options.reverse_transfer              Boolean indicating whether the transfer should be reversed when
+     *     refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the
+     *     entire or partial amount).
+     * @return Promise                   a Promise that resolves to either: an empty object if the payment method
+     *     collection was successful, or an object with an error field if there was an error while collecting the
+     *     refund payment method.
+     */
+    async collectRefundPaymentMethod(charge_id, amount, currency, options) {
+        return this.terminalInstance.collectRefundPaymentMethod(charge_id, amount, currency, options);
+    }
+
+    /**
+     * Processes an in-progress refund. This method can only be successfully called after collectRefundPaymentMethod
+     * has returned successfully.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#stripeterminal-processrefund
+     *
+     * @return Promise                 A Promise that resolves to either: a refund object if the refund was successful,
+     *     oran object with an error field if there was an error while processing the refund.
+     */
+    async processRefund() {
+        return this.terminalInstance.processRefund();
+    }
+
+    /**
+     * Cancels an outstanding collectRefundPaymentMethod command.
+     *
+     * Reference: https://stripe.com/docs/terminal/js-api-reference#stripeterminal-cancelcollectrefundpaymentmethod
+     *
+     * @return Promise                 A Promise that resolves to an empty object if the cancellation was successful.
+     *     If the cancellation fails, the Promise resolves to an object with an error field.
+     */
+    async cancelCollectRefundPaymentMethod() {
+        return this.terminalInstance.cancelCollectRefundPaymentMethod();
     }
 }
 

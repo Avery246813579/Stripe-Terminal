@@ -142,5 +142,52 @@ Updates the reader display with [cart details](https://stripe.com/docs/terminal/
 StripeTerminal.setReaderDisplay(displayInfo);
 ```
 
+## Creating Refunds 
+Begins collecting a payment method to be refunded.
+
+Check about how to use this method here https://stripe.com/docs/terminal/js-api-reference#stripeterminal-collectrefundpaymentmethod
+
+```javascript
+StripeTerminal.collectRefundPaymentMethod(charge_id, amount, currency, options);
+```
+
+To process the refund:
+
+```javascript
+StripeTerminal.processRefund();
+```
+
+If you need to cancel the refund:
+
+```javascript
+StripeTerminal.cancelCollectRefundPaymentMethod();
+```
+
+## Reads reusable card 
+Reads a card for online reuse.
+
+```javascript
+StripeTerminal.readReusableCard();
+```
+
+## Cancels reusable card 
+Reads a card for online reuse.
+
+```javascript
+StripeTerminal.cancelReadReusableCard();
+```
+
+## Set Simulator Configuration 
+Sets the configuration object for the simulated card reader.
+
+Check the reference for each parameter at Stripe https://stripe.com/docs/terminal/js-api-reference#stripeterminal-setsimulatorconfig
+
+```javascript
+StripeTerminal.setSimulatorConfiguration({testCardNumber: "4242424242424242", testPaymentMethod: "visa"});
+```
+
 # Todo
+- Think about switching to exports instead of class based
+- Maybe reject promise instead of returning error
+- Add in some better examples
 - Add in tests
