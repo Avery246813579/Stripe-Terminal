@@ -1,6 +1,6 @@
 {
   "name": "stripe-terminal",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "A SDK for stripe terminal",
   "main": "dist/index.js",
   "jsnext:main": "src/index.js",
