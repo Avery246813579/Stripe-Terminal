@@ -1,3 +1,7 @@
+# Deprecated 
+Use the Stripe maintained [@stripe/terminal-js](https://www.npmjs.com/package/@stripe/terminal-js) version instead. 
+I will stop working on this in favor of using the new Stripe integration. 
+
 # Stripe Terminal
 [![npm version](https://badge.fury.io/js/stripe-terminal.svg)](https://badge.fury.io/js/stripe-terminal)
 
