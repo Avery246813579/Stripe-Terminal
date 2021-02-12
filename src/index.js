@@ -87,7 +87,7 @@ class StripeTerminal {
             .replace("window.location.origin", '"React Native"')
             .replace("window.location.pathname", '""')
             .replace('window.location.protocol.startsWith("https")', "true")
-            .replace("var StripeTerminal=", "_ref=");
+            .replace("var StripeTerminal;StripeTerminal=", "_ref=");
 
         eval(data);
         this._StripeTerminal = _ref;
